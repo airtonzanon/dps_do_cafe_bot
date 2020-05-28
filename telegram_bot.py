@@ -43,7 +43,7 @@ def welcome_message(update, context):
     if not username:
         return
      
-    message = Message(os.path.dirname(os.path.realpath('__file__')) + 'goodmorning_user.json')
+    message = Message(os.path.dirname(os.path.realpath('__file__')) + '/goodmorning_user.json')
 
     json = message.read_file()
 
@@ -119,7 +119,7 @@ def feed(update, context):
     )
 
 def prevent_spam():
-    message = Message(os.path.dirname(os.path.realpath('__file__')) + 'prevent_spam.json')
+    message = Message(os.path.dirname(os.path.realpath('__file__')) + '/prevent_spam.json')
     json = message.read_file()
 
     try:
