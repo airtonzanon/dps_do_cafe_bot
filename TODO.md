@@ -4,6 +4,7 @@
 
 1. Lista de mensagens para bom dia
 2. Strike de dias que a pessoa conversou no chat.
+3. Mostrar episódios aleatórios de outros podcasts como sugestão.
 
 # PRECISA FAZER
 
