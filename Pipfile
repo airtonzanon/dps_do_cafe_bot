@@ -4,6 +4,13 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pytest = "*"
+pytest-pythonpath = "*"
+pytest-flake8 = "*"
+pytest-env = "*"
+flake8 = "*"
+mock = "*"
+testfixtures = "*"
 
 [packages]
 boto3 = "*"

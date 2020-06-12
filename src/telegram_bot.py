@@ -32,7 +32,8 @@ logging.basicConfig(
 def start(update, context):
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text="Este é o bot do Depois do Café, com ele você pode ouvir os nossos episódios exclusivos."
+        text="Este é o bot do Depois do Café, com ele você pode ouvir \
+                os nossos episódios exclusivos."
     )
 
 
@@ -42,12 +43,13 @@ def welcome_message(update, context):
 
     if not username:
         return
-     
-    message = Message(os.path.dirname(os.path.realpath('__file__')) + '/goodmorning_user.json')
 
-    json = message.read_file()
+    message = Message(
+            os.path.dirname(os.path.realpath('__file__')) +
+            '/goodmorning_user.json'
+    )
 
-    if True == message.verify_exists(username, today):
+    if True is message.verify_exists(username, today):
         return
 
     message.add_message(username, today)
@@ -56,6 +58,7 @@ def welcome_message(update, context):
             chat_id=update.effective_chat.id,
             text="Opa, tudo certo @{}? Como tá o seu dia?".format(username)
     )
+
 
 def episodes(update, context):
     prevent_spam()
@@ -69,7 +72,8 @@ def episodes(update, context):
         episodes += "#{} - {}\n".format(count, entry.title)
 
     episodes += "\n\n----------------------"
-    episodes += "\nPara ouvir algum episódio use o comando como o exemplo: /ouvir_episodio #1"
+    episodes += "\nPara ouvir algum episódio use o comando como o \
+            exemplo: /ouvir_episodio #1"
 
     context.bot.send_message(
         chat_id=update.effective_chat.id,
@@ -84,7 +88,8 @@ def listen_episode(update, context):
     if not re.search('#\d+', text):
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text='Opa, mas você precisa passar o numero do episodio pra gente. /ouvir_episodio #1 por exemplo'
+            text='Opa, mas você precisa passar o numero do episodio pra gente. \
+                    /ouvir_episodio #1 por exemplo'
         )
         return
 
@@ -98,7 +103,7 @@ def listen_episode(update, context):
             'link': entry.link,
         })
 
-    try: 
+    try:
         context.bot.send_audio(
             chat_id=update.effective_chat.id,
             audio=episodes[episode_number]['link']
@@ -106,7 +111,8 @@ def listen_episode(update, context):
     except IndexError:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text='Nao temos o episodio {}, para saber quais episodios temos aqui use o comando /episodios'.format(text)
+            text='Nao temos o episodio {}, para saber quais episodios temos aqui \
+                    use o comando /episodios'.format(text)
         )
         return
 
@@ -118,20 +124,27 @@ def feed(update, context):
         text=feed_url
     )
 
+
 def prevent_spam():
-    message = Message(os.path.dirname(os.path.realpath('__file__')) + '/prevent_spam.json')
+    message = Message(
+            os.path.dirname(os.path.realpath('__file__')) +
+            '/prevent_spam.json'
+    )
     json = message.read_file()
 
     try:
-        last_command = datetime.strptime(json['command'][0], "%Y-%m-%d %H:%M:%S.%f") + timedelta(minutes=5)
+        last_command = datetime.strptime(
+                json['command'][0],
+                "%Y-%m-%d %H:%M:%S.%f") + timedelta(minutes=5)
 
         if last_command > datetime.now():
-            raise RuntimeError("MUITA MENSAGEM")   
-        
+            raise RuntimeError("MUITA MENSAGEM")
+
         message.re_write('command', str(datetime.now()))
 
     except KeyError:
         message.re_write('command', str(datetime.now()))
+
 
 def unknown(update, context):
     context.bot.send_message(
@@ -139,7 +152,11 @@ def unknown(update, context):
         text="Desculpa mas não estamos sintonizados neste comando."
     )
 
-welcome_message_handler = MessageHandler(Filters.text & (~Filters.command), welcome_message)
+
+welcome_message_handler = MessageHandler(
+        Filters.text & (~Filters.command),
+        welcome_message
+)
 start_handler = CommandHandler('start', start)
 episodes_handler = CommandHandler('episodios', episodes)
 listen_episode_handler = CommandHandler('ouvir_episodio', listen_episode)
@@ -154,4 +171,7 @@ dispatcher.add_handler(listen_episode_handler)
 dispatcher.add_handler(feed_url_handler)
 dispatcher.add_handler(unknown_handler)
 
-updater.start_polling()
+
+def main():
+    updater.start_polling()
+
